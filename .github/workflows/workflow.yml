@@ -9,20 +9,20 @@ permissions:
   pull-requests: write
 
 jobs:
-    build-frontend:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Recuperer le code source
-        - uses: actions/checkout@v4
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le code source
+      - uses: actions/checkout@v4
 
-        - name: installer nodejs
-        - uses: actions/setup-node@v4
-          with:
+      - name: installer nodejs
+      - uses: actions/setup-node@v4
+        with:
             node-version: '22'
             cache: 'npm'
 
-        - name: build frontend
-        - run: |
+      - name: build frontend
+        run: |
             cd frontend
             npm ci
             npm run build
