@@ -1,0 +1,33 @@
+# --- Étape 1 : Build ---
+FROM node:22-alpine AS build
+WORKDIR /app
+
+# Cache des dépendances : copier les fichiers de dépendances AVANT le code source
+COPY package*.json ./
+RUN npm ci
+
+# Copie du reste du projet et build
+COPY . .
+RUN npm run build
+
+# --- Étape 2 : Production ---
+FROM node:22-alpine AS production
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=80
+ENV HOSTNAME="0.0.0.0"
+
+# Exécuter sous un utilisateur non-root pour la sécurité
+USER node
+
+# Fichiers générés par le mode standalone
+COPY --from=build --chown=node:node /app/.next/standalone ./
+COPY --from=build --chown=node:node /app/.next/static ./.next/static
+
+# Fichiers publics (décommentez si vous avez un dossier public)
+COPY --from=build --chown=node:node /app/public ./public
+
+EXPOSE 80
+
+CMD ["node", "server.js"]

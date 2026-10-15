@@ -1,0 +1,32 @@
+services:
+
+  frontendc:
+    container_name: nantenaina_front
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - josefa
+
+  postrestsanta:
+    container_name: nantenaina_postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB:       ${POSTGRES_DB:-ecole_db}
+      POSTGRES_USER:     ${POSTGRES_USER:-ecole_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ecole_dev_pass}
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - josefa
+
+
+networks:
+  josefa:
+    name: josefanetwork
+    driver: bridge
