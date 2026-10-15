@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  build-frontend:
+  job1:
     runs-on: ubuntu-latest
     steps:
       - name: Recuperer le code source
