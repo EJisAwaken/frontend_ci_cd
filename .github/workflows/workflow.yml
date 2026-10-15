@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  job1:
+  test-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Recuperer le code source
@@ -25,3 +25,17 @@ jobs:
         run: |
             npm ci
             npm run build
+            
+
+  buildfrontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name : recuper le code source
+        uses: actions/checkout@v4
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v7
+        with:
+            context: ./
+            file: ./Dockerfile
+            push: false
+            tags: nantenaina/frontend:latest
